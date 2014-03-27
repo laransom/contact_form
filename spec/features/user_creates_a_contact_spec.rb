@@ -54,5 +54,40 @@ feature 'User creates a contact', %q{
 
     end
   end
+  context 'data inputted persists in index' do
+    it 'shows new data on index page after contact is created' do
+
+      visit '/contacts/new'
+      fill_in 'Email', with: 'karazee@gmail.com'
+      fill_in 'Subject', with: 'LaunchAcademy Rulezzz'
+      fill_in 'Description', with: 'Crazy Kupcakes'
+      fill_in 'First name', with: 'Franz'
+      fill_in 'Last name', with: 'Ferdinand'
+      click_on 'Create Contact'
+      click_on 'Back'
+
+      expect(page).to have_content 'karazee@gmail.com'
+      expect(page).to have_content 'LaunchAcademy Rulezz'
+      expect(page).to have_content 'Crazy Kupcakes'
+      expect(page).to have_content 'Franz'
+      expect(page).to have_content 'Ferdinand'
+    end
+  end
+
+  context 'Deleted data is deleted' do
+    it 'deletes file when destroy is selected' do
+
+      visit '/contacts/new'
+      fill_in 'Email', with: 'karazee@gmail.com'
+      fill_in 'Subject', with: 'LaunchAcademy Rulezzz'
+      fill_in 'Description', with: 'Crazy Kupcakes'
+      fill_in 'First name', with: 'Franz'
+      fill_in 'Last name', with: 'Ferdinand'
+      click_on 'Create Contact'
+      click_on 'Back'
+
+      expect { click_link 'Destroy' }.to change(Contact, :count).by(-1)
+    end
+  end
 
 end
